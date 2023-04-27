@@ -19,6 +19,10 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 # Get the user IP address
 ip_address = client_ip()
 
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
 # Main function for the AI debate app
 def main():
 
@@ -27,23 +31,8 @@ def main():
         st.session_state.debate_completed = False
 
     # Custom CSS for gradient styling
-    st.markdown("""
-    <style>
-        .pro-gradient {
-            background: linear-gradient(to right, #4286f4, #373b44);
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-        }
-        .con-gradient {
-            background: linear-gradient(to right, #373b44, #f45c42);
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-        }
-    </style>
-    
-    """, unsafe_allow_html=True)
+    #  To get rid of the Streamlit branding stuff
+    local_css("static/styles.css")
 
     # App title
     st.title("DebateGPT")
