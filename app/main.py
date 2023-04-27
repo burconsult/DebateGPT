@@ -192,8 +192,16 @@ def main():
                 st.error(f"An error occurred while saving the debate to the database: {str(e)}")
                 st.error(traceback.format_exc())
 
-    # Add a button to display previous debates
-    if st.button("Show Previous Debates"):
+    # Initialize the session_state for the button if it doesn't exist
+    if "show_previous_debates" not in st.session_state:
+        st.session_state.show_previous_debates = False
+
+    # Toggle the session_state when the button is clicked
+    if st.button("Show Previous Debates" if not st.session_state.show_previous_debates else "Hide Previous Debates"):
+        st.session_state.show_previous_debates = not st.session_state.show_previous_debates
+
+    # Display previous debates if the session_state is True
+    if st.session_state.show_previous_debates:
         display_previous_debates()
 
     display_about()
