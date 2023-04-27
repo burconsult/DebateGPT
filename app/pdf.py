@@ -11,7 +11,9 @@ def save_debate_as_pdf(debate_id, topic, pro_args, con_args):
         file_name = f"pdf/{debate_id}.pdf"
         pdf = FPDF()
         pdf.add_page()
-        pdf.set_font("Arial", size=12)
+        # Add the custom font for Unicode support
+        pdf.add_font("DejaVu", "", "static/DejaVuSans.ttf", uni=True)
+        pdf.set_font("DejaVu", size=12)
 
         pdf.cell(200, 10, txt=f"Debate Topic: {topic}", ln=True, align="C")
         pdf.cell(200, 10, txt=f"Debate ID: {debate_id}", ln=True, align="C")
