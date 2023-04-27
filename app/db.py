@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 
 def save_debate_to_db(debate_id, topic, ip_address, pro_args, con_args):
         conn = sqlite3.connect("db/debates.db")
@@ -13,18 +14,7 @@ def save_debate_to_db(debate_id, topic, ip_address, pro_args, con_args):
         conn.close()
 
 def get_previous_debates():
-        # Connect to the SQLite database
-        conn = sqlite3.connect("db/debates.db")
-        cursor = conn.cursor()
-
-        # Execute the query to fetch previous debates
-        cursor.execute("SELECT * FROM debates")
-
-        # Fetch all the rows as a list of tuples
-        previous_debates = cursor.fetchall()
-
-        # Close the database connection
-        conn.close()
-
-        # Return the list of previous debates
-        return previous_debates
+    conn = sqlite3.connect("db/debates.db")
+    df = pd.read_sql_query("SELECT * from debates", conn)
+    conn.close()
+    return df

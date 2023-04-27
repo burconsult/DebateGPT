@@ -160,6 +160,40 @@ def main():
                 st.error(f"An error occurred while saving the debate to the database: {str(e)}")
                 st.error(traceback.format_exc())
     
-    previous_debates = get_previous_debates()
-    st.write("Previous Debates:")
-    st.write(previous_debates)
+def display_previous_debates():
+    df = get_previous_debates()
+    df["pro_args_sample"] = df["pro_args"].str[:100] + "..."
+    df["con_args_sample"] = df["con_args"].str[:100] + "..."
+
+    # Display the DataFrame with truncated arguments
+    st.dataframe(df[["debate_id", "topic", "pro_args_sample", "con_args_sample"]])
+
+    # Add expanders to show full arguments
+    for index, row in df.iterrows():
+        with st.expander(f"Debate ID: {row['debate_id']}"):
+            st.write(f"Topic: {row['topic']}")
+            st.write("Pro Arguments:")
+            st.write(row["pro_args"])
+            st.write("Con Arguments:")
+            st.write(row["con_args"])
+
+def display_about():
+    st.markdown('''
+    # About
+    This app is a [Blueberry Thoughts](https://blueberrythoughts.com) project. The source code is available on [GitHub](https://github.com/burconsult/DebateGPT).
+    
+    # Credits
+    - [OpenAI](https://openai.com) for the [GPT-3](https://openai.com/blog/openai-api/) API
+    - [Streamlit](https://streamlit.io) for the [Streamlit](https://streamlit.io) framework
+    - [GitHub](https://github.com) for the [GitHub](https://github.com) platform
+    - [Python](https://python.org) for the [Python](https://python.org) programming language
+
+    # Disclaimer
+    This app is for educational purposes only. It is not intended to be used for any other purpose.
+    ''')
+
+    # Add a button to display previous debates
+    if st.button("Show Previous Debates"):
+        display_previous_debates()
+
+    display_about()
