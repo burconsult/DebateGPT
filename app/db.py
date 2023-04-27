@@ -1,9 +1,8 @@
 import sqlite3
 
 def save_debate_to_db(debate_id, topic, ip_address, pro_args, con_args):
-        conn = sqlite3.connect("debates.db")
+        conn = sqlite3.connect("db/debates.db")
         cursor = conn.cursor()
-
         cursor.execute('''CREATE TABLE IF NOT EXISTS debates
                           (debate_id TEXT PRIMARY KEY, topic TEXT, ip_address TEXT, pro_args TEXT, con_args TEXT)''')
 
@@ -15,7 +14,7 @@ def save_debate_to_db(debate_id, topic, ip_address, pro_args, con_args):
 
 def get_previous_debates():
         # Connect to the SQLite database
-        conn = sqlite3.connect("debates.db")
+        conn = sqlite3.connect("db/debates.db")
         cursor = conn.cursor()
 
         # Execute the query to fetch previous debates
