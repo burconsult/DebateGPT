@@ -2,7 +2,6 @@
 # Ignore Environment files
 .env
 # Ignore SQLite files
-db/
 *.sqlite3
 *.db
 # Ignore Python cache files
