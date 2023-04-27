@@ -1,6 +1,5 @@
 streamlit
 streamlit_javascript
-streamlit_auth0
 openai
 fpdf
 pandas

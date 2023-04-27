@@ -3,7 +3,6 @@ import random
 import traceback
 from uuid import uuid4
 from PIL import Image
-from streamlit_auth0 import get_user_info
 
 from .gpt import get_gpt_response
 from .db import save_debate_to_db, get_previous_debates, delete_debate_from_db
@@ -31,9 +30,6 @@ def display_previous_debates():
     # Display the DataFrame with truncated arguments
     st.dataframe(df[["debate_id", "topic", "pro_args_sample", "con_args_sample"]])
 
-    # Get user information
-    user_info = get_user_info()
-    
     # Add expanders to show full arguments
     for index, row in df.iterrows():
         with st.expander(f"Debate ID: {row['debate_id']}"):
@@ -57,12 +53,10 @@ def display_previous_debates():
             except Exception as e:
                 st.write("No PDF available for download.")
             
-             # Check if the logged-in user's email matches your email
-            if user_info["email"] == "your_email@example.com":
-                # Add delete button for the debate
-                if st.button(f"Delete debate {row['debate_id']}"):
-                    delete_debate_from_db(row['debate_id'])
-                    st.write("Debate deleted successfully.")
+            # Add delete button for the debate
+            if st.button(f"Delete debate {row['debate_id']}"):
+                delete_debate_from_db(row['debate_id'])
+                st.write("Debate deleted successfully.")
 
 def display_about():
     st.markdown('''
