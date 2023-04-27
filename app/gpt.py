@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Access the OpenAI API key from environment variables
-openai.api_key = openai_api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 # Function to get GPT response using chat format
 def get_gpt_response(messages):
