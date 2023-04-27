@@ -5,7 +5,7 @@ from uuid import uuid4
 from PIL import Image
 
 from .gpt import get_gpt_response
-from .db import save_debate_to_db
+from .db import save_debate_to_db, get_previous_debates
 from .pdf import save_debate_as_pdf
 from .ip import client_ip
 
@@ -159,3 +159,7 @@ def main():
             except Exception as e:
                 st.error(f"An error occurred while saving the debate to the database: {str(e)}")
                 st.error(traceback.format_exc())
+    
+    previous_debates = get_previous_debates()
+    st.write("Previous Debates:")
+    st.write(previous_debates)
