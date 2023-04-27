@@ -38,6 +38,16 @@ def display_previous_debates():
             st.write(row["pro_args"])
             st.write("Con Arguments:")
             st.write(row["con_args"])
+            # Add download button for the PDF
+            pdf_path = f"pdf/{row['debate_id']}.pdf"
+            with open(pdf_path, "rb") as pdf_file:
+                pdf_data = pdf_file.read()
+            st.download_button(
+                label="Download PDF",
+                data=pdf_data,
+                file_name=f"{row['debate_id']}.pdf",
+                mime="application/pdf"
+            )
 
 def display_about():
     st.markdown('''
