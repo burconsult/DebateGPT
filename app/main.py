@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import random
 import traceback
@@ -11,6 +12,9 @@ from .ip import client_ip
 
 # Set up the Streamlit app
 st.set_page_config(page_title="DebateGPT", layout="wide")
+
+#Get the OPEANAI_API_KEY from the environment variables
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # Get the user IP address
 ip_address = client_ip()
