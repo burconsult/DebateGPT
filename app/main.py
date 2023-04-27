@@ -14,7 +14,7 @@ from .ip import client_ip
 st.set_page_config(page_title="DebateGPT", layout="wide")
 
 #Get the OPEANAI_API_KEY from the environment variables
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+api_key = st.secrets["OPENAI_API_KEY"]
 
 # Get the user IP address
 ip_address = client_ip()
@@ -75,8 +75,8 @@ def main():
 
         # Use a loading spinner with random phrases while generating messages
         with st.spinner(random.choice(debate_phrases)):
-            pro_arguments = get_gpt_response(pro_messages)
-            con_arguments = get_gpt_response(con_messages)
+            pro_arguments = get_gpt_response(pro_messages, api_key)
+            con_arguments = get_gpt_response(con_messages, api_key)
             pro_args = pro_arguments
             con_args = con_arguments
 
@@ -102,8 +102,8 @@ def main():
                 con_messages.append({"role": "user", "content": f"Respond to the arguments in favor of the motion. Keep it under 140 words."})
 
                 # Get GPT-generated responses for the debate exchange
-                pro_arguments = get_gpt_response(pro_messages)
-                con_arguments = get_gpt_response(con_messages)
+                pro_arguments = get_gpt_response(pro_messages, api_key)
+                con_arguments = get_gpt_response(con_messages, api_key)
                 pro_args += pro_arguments
                 con_args += con_arguments
 
@@ -126,8 +126,8 @@ def main():
 
         # Get GPT-generated final reflections
         with st.spinner(random.choice(debate_phrases)):
-            pro_reflection = get_gpt_response(pro_messages)
-            con_reflection = get_gpt_response(con_messages)
+            pro_reflection = get_gpt_response(pro_messages, api_key)
+            con_reflection = get_gpt_response(con_messages, api_key)
             pro_args += pro_reflection
             con_args += con_reflection
 
