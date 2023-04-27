@@ -18,3 +18,10 @@ def get_previous_debates():
     df = pd.read_sql_query("SELECT * from debates", conn)
     conn.close()
     return df
+
+def delete_debate_from_db(debate_id):
+    conn = sqlite3.connect("db/debates.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM debates WHERE debate_id = ?", (debate_id,))
+    conn.commit()
+    conn.close()
