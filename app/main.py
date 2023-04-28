@@ -108,134 +108,137 @@ def display_new_debate():
         st.error("You have reached the maximum number of debates allowed for this hour.")
     else:
         st.write(f"You can run 3 debates each hour.")
-        start_debate = st.button("Start Debate")
+        
+        # Add a button to start the debate
+        start_debate_button = st.button("Start Debate")
+        if start_debate_button:
+            if not topic:
+                st.error("Please enter a debate topic.")
+                return
+            else:
+                start_debate(topic, num_exchanges, include_final_reflections, ip_address)
 
-    # Add a button to start the debate
-    
-    if start_debate:
-        if not topic:
-            st.error("Please enter a debate topic.")
-            return
-        else:
-            # Generate a random ID for the debate
-            debate_id = str(uuid4())
 
-            # Define funny short phrases about debates
-            debate_phrases = [
-                "Assembling witty retorts...",
-                "Gathering debate ammunition...",
-                "Brushing up on logical fallacies...",
-                "Studying counterarguments...",
-                "Practicing rhetorical flourishes...",
-                "Polishing debate trophies...",
-                "Lubricating the gears of discourse..."
-            ]
+def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
+    # Generate a random ID for the debate
+    debate_id = str(uuid4())
 
-            # Prepare initial messages for pro and con arguments
-            pro_messages = [
-                {"role": "system", "content": "You are Debate Team A's leader, and you are participating in the most prestigious debate championship. As the speaker for the proposition side, you are responsible for presenting arguments in favor of the motion, outlining the main points and justifications. Remember to keep it under 120 words and maintain a formal and persuasive tone throughout your response."},
-                {"role": "user", "content": f"The motion for this debate is: {topic}?"},
-            ]
-            con_messages = [
-                {"role": "system", "content": "You are Debate Team B's leader, and you are participating in the most prestigious debate championship. As the speaker for the opposition side, you are responsible for presenting arguments against the motion, outlining the main points and justifications. Remember to keep it under 120 words and maintain a formal and persuasive tone throughout your response."},
-                {"role": "user", "content": f"The motion for this debate is: {topic}?"},
-            ]
+    # Define funny short phrases about debates
+    debate_phrases = [
+        "Assembling witty retorts...",
+        "Gathering debate ammunition...",
+        "Brushing up on logical fallacies...",
+        "Studying counterarguments...",
+        "Practicing rhetorical flourishes...",
+        "Polishing debate trophies...",
+        "Lubricating the gears of discourse..."
+    ]
 
-            # Use a loading spinner with random phrases while generating messages
-            with st.spinner(random.choice(debate_phrases)):
-                pro_arguments = get_gpt_response(pro_messages, api_key)
-                con_arguments = get_gpt_response(con_messages, api_key)
-                pro_args = pro_arguments
-                con_args = con_arguments
+    # Prepare initial messages for pro and con arguments
+    pro_messages = [
+        {"role": "system", "content": "You are Debate Team A's leader, and you are participating in the most prestigious debate championship. As the speaker for the proposition side, you are responsible for presenting arguments in favor of the motion, outlining the main points and justifications. Remember to keep it under 120 words and maintain a formal and persuasive tone throughout your response."},
+        {"role": "user", "content": f"The motion for this debate is: {topic}?"},
+    ]
+    con_messages = [
+        {"role": "system", "content": "You are Debate Team B's leader, and you are participating in the most prestigious debate championship. As the speaker for the opposition side, you are responsible for presenting arguments against the motion, outlining the main points and justifications. Remember to keep it under 120 words and maintain a formal and persuasive tone throughout your response."},
+        {"role": "user", "content": f"The motion for this debate is: {topic}?"},
+    ]
 
-            # Print the initial arguments
+    # Use a loading spinner with random phrases while generating messages
+    with st.spinner(random.choice(debate_phrases)):
+        pro_arguments = get_gpt_response(pro_messages, api_key)
+        con_arguments = get_gpt_response(con_messages, api_key)
+        pro_args = pro_arguments
+        con_args = con_arguments
+
+    # Print the initial arguments
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.header(':blue[Initial Pro arguments]')
+        st.markdown(f'<div class="pro-gradient">{pro_arguments}</div>', unsafe_allow_html=True)
+
+    with col2:
+        st.header(':red[Initial Con arguments]')
+        st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
+
+    # Use a loading spinner with random phrases while generating responses
+    for i in range(num_exchanges):
+        with st.spinner(random.choice(debate_phrases)):
+
+            # Prepare messages for the debate exchange
+            pro_messages.append({"role": "assistant", "content": con_arguments})
+            pro_messages.append({"role": "user", "content": f"Respond to the arguments against the motion. Keep it under 140 words."})
+            con_messages.append({"role": "assistant", "content": pro_arguments})
+            con_messages.append({"role": "user", "content": f"Respond to the arguments in favor of the motion. Keep it under 140 words."})
+
+            # Get GPT-generated responses for the debate exchange
+            pro_arguments = get_gpt_response(pro_messages, api_key)
+            con_arguments = get_gpt_response(con_messages, api_key)
+            pro_args += pro_arguments
+            con_args += con_arguments
+
+            # Print the exchange arguments
             col1, col2 = st.columns(2)
-
+            exid = str(i+1)
             with col1:
-                st.header(':blue[Initial Pro arguments]')
+                st.header(':blue[Pro arguments - '+exid+']')
                 st.markdown(f'<div class="pro-gradient">{pro_arguments}</div>', unsafe_allow_html=True)
 
             with col2:
-                st.header(':red[Initial Con arguments]')
+                st.header(':red[Con arguments - '+exid+']')
                 st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
 
-            # Use a loading spinner with random phrases while generating responses
-            for i in range(num_exchanges):
-                with st.spinner(random.choice(debate_phrases)):
+    # Use the state of the checkbox to conditionally include final reflections
+    if include_final_reflections:
+        # Prepare final reflection messages
+        pro_messages.append({"role": "assistant", "content": con_arguments})
+        pro_messages.append({"role": "user", "content": "You are Debate Team A's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
+        con_messages.append({"role": "assistant", "content": pro_arguments})
+        con_messages.append({"role": "user", "content": "You are Debate Team B's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
 
-                    # Prepare messages for the debate exchange
-                    pro_messages.append({"role": "assistant", "content": con_arguments})
-                    pro_messages.append({"role": "user", "content": f"Respond to the arguments against the motion. Keep it under 140 words."})
-                    con_messages.append({"role": "assistant", "content": pro_arguments})
-                    con_messages.append({"role": "user", "content": f"Respond to the arguments in favor of the motion. Keep it under 140 words."})
+        # Get GPT-generated final reflections
+        with st.spinner(random.choice(debate_phrases)):
+            pro_reflection = get_gpt_response(pro_messages, api_key)
+            con_reflection = get_gpt_response(con_messages, api_key)
+            pro_args += pro_reflection
+            con_args += con_reflection
 
-                    # Get GPT-generated responses for the debate exchange
-                    pro_arguments = get_gpt_response(pro_messages, api_key)
-                    con_arguments = get_gpt_response(con_messages, api_key)
-                    pro_args += pro_arguments
-                    con_args += con_arguments
+        # Print final reflections
+        col1, col2 = st.columns(2)
+        with col1:
+            st.header(':blue[Final reflections from the Pro Team]')
+            st.markdown(f'<div class="pro-gradient">{pro_reflection}</div>', unsafe_allow_html=True)
 
-                    # Print the exchange arguments
-                    col1, col2 = st.columns(2)
-                    exid = str(i+1)
-                    with col1:
-                        st.header(':blue[Pro arguments - '+exid+']')
-                        st.markdown(f'<div class="pro-gradient">{pro_arguments}</div>', unsafe_allow_html=True)
+        with col2:
+            st.header(':red[Final reflections from the Con Team]')
+            st.markdown(f'<div class="con-gradient">{con_reflection}</div>', unsafe_allow_html=True)
+    else:
+        pass
 
-                    with col2:
-                        st.header(':red[Con arguments - '+exid+']')
-                        st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
+    # Set debate_completed to True after the debate is done
+    st.session_state.debate_completed = True
 
-            # Use the state of the checkbox to conditionally include final reflections
-            if include_final_reflections:
-                # Prepare final reflection messages
-                pro_messages.append({"role": "assistant", "content": con_arguments})
-                pro_messages.append({"role": "user", "content": "You are Debate Team A's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
-                con_messages.append({"role": "assistant", "content": pro_arguments})
-                con_messages.append({"role": "user", "content": "You are Debate Team B's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
+    if st.session_state.debate_completed:
+        # Save the debate as a PDF
+        try:
+            save_debate_as_pdf(debate_id, topic, pro_args, con_args)
+            st.success("Debate saved as PDF file successfully.")
+        except Exception as e:
+            st.error(f"An error occurred while saving the debate to a PDF file: {str(e)}")
+            st.error(traceback.format_exc())
 
-                # Get GPT-generated final reflections
-                with st.spinner(random.choice(debate_phrases)):
-                    pro_reflection = get_gpt_response(pro_messages, api_key)
-                    con_reflection = get_gpt_response(con_messages, api_key)
-                    pro_args += pro_reflection
-                    con_args += con_reflection
-
-                # Print final reflections
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.header(':blue[Final reflections from the Pro Team]')
-                    st.markdown(f'<div class="pro-gradient">{pro_reflection}</div>', unsafe_allow_html=True)
-
-                with col2:
-                    st.header(':red[Final reflections from the Con Team]')
-                    st.markdown(f'<div class="con-gradient">{con_reflection}</div>', unsafe_allow_html=True)
-            else:
-                pass
-
-            # Set debate_completed to True after the debate is done
-            st.session_state.debate_completed = True
-
-            if st.session_state.debate_completed:
-                # Save the debate as a PDF
-                try:
-                    save_debate_as_pdf(debate_id, topic, pro_args, con_args)
-                    st.success("Debate saved as PDF file successfully.")
-                except Exception as e:
-                    st.error(f"An error occurred while saving the debate to a PDF file: {str(e)}")
-                    st.error(traceback.format_exc())
-
-                # Save the debate to the database
-                try:
-                    save_debate_to_db(debate_id, topic, ip_address, pro_args, con_args)
-                    st.success("Debate saved to the database successfully.")
-                except Exception as e:
-                    st.error(f"An error occurred while saving the debate to the database: {str(e)}")
-                    st.error(traceback.format_exc())
-                
-                # Show the download link for the PDF file
-                download_pdf(debate_id)
-            pass    
+        # Save the debate to the database
+        try:
+            save_debate_to_db(debate_id, topic, ip_address, pro_args, con_args)
+            st.success("Debate saved to the database successfully.")
+        except Exception as e:
+            st.error(f"An error occurred while saving the debate to the database: {str(e)}")
+            st.error(traceback.format_exc())
+        
+        # Show the download link for the PDF file
+        download_pdf(debate_id)
+    pass
 
 # Main function for the AI debate app
 def main():
