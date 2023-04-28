@@ -88,7 +88,7 @@ def display_new_debate():
 
     # Get the user IP address
     ip_address = get_client_ip()
-    
+
     # Get the debate topic and number of exchanges
     max_chars = 100
     topic = st.text_input("Enter the debate topic:", value="This house believes that ")
@@ -261,9 +261,6 @@ def main():
     elif app_mode == "View Previous Debates":
         display_previous_debates()
     elif app_mode == "Start a New Debate":
-        if ip_address and is_rate_limited(ip_address):
-            st.warning("You have exceeded the limit of 3 uses per hour. Please wait before trying again.")
-        else:
-            display_new_debate()
+        display_new_debate()
     #Display the footer
     display_footer()
