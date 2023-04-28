@@ -182,32 +182,33 @@ def main():
                 with col2:
                     st.header(':red[Con arguments against the motion - '+exid+']')
                     st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
-    # Use the state of the checkbox to conditionally include final reflections
-    if include_final_reflections:
-        # Prepare final reflection messages
-        pro_messages.append({"role": "assistant", "content": con_arguments})
-        pro_messages.append({"role": "user", "content": "You are Debate Team A's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
-        con_messages.append({"role": "assistant", "content": pro_arguments})
-        con_messages.append({"role": "user", "content": "You are Debate Team B's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
 
-        # Get GPT-generated final reflections
-        with st.spinner(random.choice(debate_phrases)):
-            pro_reflection = get_gpt_response(pro_messages, api_key)
-            con_reflection = get_gpt_response(con_messages, api_key)
-            pro_args += pro_reflection
-            con_args += con_reflection
+        # Use the state of the checkbox to conditionally include final reflections
+        if include_final_reflections:
+            # Prepare final reflection messages
+            pro_messages.append({"role": "assistant", "content": con_arguments})
+            pro_messages.append({"role": "user", "content": "You are Debate Team A's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
+            con_messages.append({"role": "assistant", "content": pro_arguments})
+            con_messages.append({"role": "user", "content": "You are Debate Team B's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
 
-        # Print final reflections
-        col1, col2 = st.columns(2)
-        with col1:
-            st.header(':blue[Final reflections from the Pro Team]')
-            st.markdown(f'<div class="pro-gradient">{pro_reflection}</div>', unsafe_allow_html=True)
+            # Get GPT-generated final reflections
+            with st.spinner(random.choice(debate_phrases)):
+                pro_reflection = get_gpt_response(pro_messages, api_key)
+                con_reflection = get_gpt_response(con_messages, api_key)
+                pro_args += pro_reflection
+                con_args += con_reflection
 
-        with col2:
-            st.header(':red[Final reflections from the Con Team]')
-            st.markdown(f'<div class="con-gradient">{con_reflection}</div>', unsafe_allow_html=True)
-    else:
-        pass
+            # Print final reflections
+            col1, col2 = st.columns(2)
+            with col1:
+                st.header(':blue[Final reflections from the Pro Team]')
+                st.markdown(f'<div class="pro-gradient">{pro_reflection}</div>', unsafe_allow_html=True)
+
+            with col2:
+                st.header(':red[Final reflections from the Con Team]')
+                st.markdown(f'<div class="con-gradient">{con_reflection}</div>', unsafe_allow_html=True)
+        else:
+            pass
 
         # Set debate_completed to True after the debate is done
         st.session_state.debate_completed = True
