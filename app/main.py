@@ -113,6 +113,9 @@ def display_new_debate():
             # Generate a random ID for the debate
             debate_id = str(uuid4())
 
+            # Display the rate limit remaining
+            st.write(f"You have {get_rate_limit_remaining(client_ip)} debates remaining for this hour.")
+
             # Define funny short phrases about debates
             debate_phrases = [
                 "Assembling witty retorts...",
