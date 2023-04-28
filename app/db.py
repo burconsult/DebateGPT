@@ -9,6 +9,7 @@ def create_database():
         CREATE TABLE debates (
             debate_id TEXT PRIMARY KEY,
             topic TEXT,
+            ip_address TEXT,
             pro_args TEXT,
             con_args TEXT
         )

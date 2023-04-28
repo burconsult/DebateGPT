@@ -1,4 +1,5 @@
 import os
+import streamlit as st
 from fpdf import FPDF
 
 # Save the debate as a PDF
@@ -23,3 +24,18 @@ def save_debate_as_pdf(debate_id, topic, pro_args, con_args):
         pdf.multi_cell(200, 10, txt=con_args)
 
         pdf.output(file_name)
+
+# Add download button for the PDF
+def download_pdf(debate_id):
+        pdf_path = f"pdf/{debate_id}.pdf"
+        try:
+                with open(pdf_path, "rb") as pdf_file:
+                        pdf_data = pdf_file.read()
+                st.download_button(
+                        label="Download PDF",
+                        data=pdf_data,
+                        file_name=f"{debate_id}.pdf",
+                        mime="application/pdf"
+                )
+        except Exception as e:
+                st.write("No PDF available for download.")

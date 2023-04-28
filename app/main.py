@@ -6,7 +6,7 @@ from PIL import Image
 
 from .gpt import get_gpt_response
 from .db import save_debate_to_db, get_previous_debates, delete_debate_from_db
-from .pdf import save_debate_as_pdf
+from .pdf import save_debate_as_pdf, download_pdf
 from .ip import client_ip
 from .limit import is_rate_limited, get_rate_limit_remaining, get_rate_limit_reset_time
 
@@ -39,20 +39,9 @@ def display_previous_debates():
             st.write(row["pro_args"])
             st.write("Con Arguments:")
             st.write(row["con_args"])
-            
+
             # Add download button for the PDF
-            pdf_path = f"pdf/{row['debate_id']}.pdf"
-            try:
-                with open(pdf_path, "rb") as pdf_file:
-                    pdf_data = pdf_file.read()
-                st.download_button(
-                    label="Download PDF",
-                    data=pdf_data,
-                    file_name=f"{row['debate_id']}.pdf",
-                    mime="application/pdf"
-                )
-            except Exception as e:
-                st.write("No PDF available for download.")
+            download_pdf(row['debate_id'])
             
             # Add delete button for the debate
             if st.button(f"Delete debate {row['debate_id']}"):
@@ -236,6 +225,9 @@ def display_new_debate():
                 except Exception as e:
                     st.error(f"An error occurred while saving the debate to the database: {str(e)}")
                     st.error(traceback.format_exc())
+                
+                # Show the download link for the PDF file
+                download_pdf(debate_id)
             pass    
 
 # Main function for the AI debate app
