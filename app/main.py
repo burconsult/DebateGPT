@@ -104,6 +104,9 @@ def display_new_debate():
     # Add a checkbox for making final reflections optional
     include_final_reflections = st.checkbox("Include final reflections", value=True)
 
+    # Display the rate limit remaining
+    st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
+
     # Add a button to start the debate
     start_debate = st.button("Start Debate")
     if start_debate:
@@ -113,9 +116,6 @@ def display_new_debate():
         else:
             # Generate a random ID for the debate
             debate_id = str(uuid4())
-
-            # Display the rate limit remaining
-            st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
 
             # Define funny short phrases about debates
             debate_phrases = [
