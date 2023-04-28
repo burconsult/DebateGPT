@@ -3,3 +3,4 @@ streamlit_javascript
 openai
 fpdf
 pandas
+ratelimiter

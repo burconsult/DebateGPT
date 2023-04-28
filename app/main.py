@@ -8,6 +8,7 @@ from .gpt import get_gpt_response
 from .db import save_debate_to_db, get_previous_debates, delete_debate_from_db
 from .pdf import save_debate_as_pdf
 from .ip import client_ip
+from .limit import is_rate_limited, get_rate_limit_remaining, get_rate_limit_reset_time
 
 # Set up the Streamlit app
 st.set_page_config(page_title="DebateGPT", layout="wide")
@@ -91,12 +92,26 @@ def main():
 
 
     # Get the debate topic and number of exchanges
+    max_chars = 100
     topic = st.text_input("Enter the debate topic:", value="This house believes that ")
-    num_exchanges = st.number_input("Enter the number of exchanges:", min_value=1, step=1)
+    if len(topic) > max_chars:
+        st.error(f"The debate topic must be no longer than {max_chars} characters.")
+    else:
+        pass
 
-    if st.button("Start Debate"):
-        if not topic:
-            st.error("Please enter a debate topic.")
+    # Get the number of exchanges
+    num_exchanges = st.number_input("Enter the number of exchanges:", min_value=1, max_value=5, step=1)
+
+    # Add a checkbox for making final reflections optional
+    include_final_reflections = st.checkbox("Include final reflections", value=True)
+
+    if client_ip and is_rate_limited(client_ip):
+        st.warning("You have exceeded the limit of 3 uses per hour. Please wait before trying again.")
+    else:
+
+        if st.button("Start Debate"):
+            if not topic:
+                st.error("Please enter a debate topic.")
             return
         
          # Generate a random ID for the debate
@@ -167,7 +182,8 @@ def main():
                 with col2:
                     st.header(':red[Con arguments against the motion - '+exid+']')
                     st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
-
+    # Use the state of the checkbox to conditionally include final reflections
+    if include_final_reflections:
         # Prepare final reflection messages
         pro_messages.append({"role": "assistant", "content": con_arguments})
         pro_messages.append({"role": "user", "content": "You are Debate Team A's leader, and you are participating in the most prestigious debate championship. Reflect on the debate that just took place."})
@@ -190,6 +206,8 @@ def main():
         with col2:
             st.header(':red[Final reflections from the Con Team]')
             st.markdown(f'<div class="con-gradient">{con_reflection}</div>', unsafe_allow_html=True)
+    else:
+        pass
         
         # Set debate_completed to True after the debate is done
         st.session_state.debate_completed = True
@@ -205,7 +223,7 @@ def main():
 
             # Save the debate to the database
             try:
-                save_debate_to_db(debate_id, topic, ip_address, pro_args, con_args)
+                save_debate_to_db(debate_id, topic, client_ip, pro_args, con_args)
                 st.success("Debate saved to the database successfully.")
             except Exception as e:
                 st.error(f"An error occurred while saving the debate to the database: {str(e)}")
