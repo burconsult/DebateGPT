@@ -15,9 +15,6 @@ st.set_page_config(page_title="DebateGPT", layout="wide")
 #Get the OPEANAI_API_KEY from the environment variables
 api_key = st.secrets["OPENAI_API_KEY"]
 
-# Get the user IP address
-ip_address = get_client_ip()
-
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -88,6 +85,10 @@ def display_footer():
     ''')
 
 def display_new_debate():
+
+    # Get the user IP address
+    ip_address = get_client_ip()
+    
     # Get the debate topic and number of exchanges
     max_chars = 100
     topic = st.text_input("Enter the debate topic:", value="This house believes that ")
