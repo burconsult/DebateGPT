@@ -7,8 +7,7 @@ from PIL import Image
 from .gpt import get_gpt_response
 from .db import save_debate_to_db, get_previous_debates, delete_debate_from_db
 from .pdf import save_debate_as_pdf, download_pdf
-from .ip import client_ip
-from .limit import is_rate_limited, get_rate_limit_remaining, get_rate_limit_reset_time
+from .limit import get_client_ip, is_rate_limited, get_rate_limit_remaining, get_rate_limit_reset_time
 
 # Set up the Streamlit app
 st.set_page_config(page_title="DebateGPT", layout="wide")
@@ -17,7 +16,7 @@ st.set_page_config(page_title="DebateGPT", layout="wide")
 api_key = st.secrets["OPENAI_API_KEY"]
 
 # Get the user IP address
-ip_address = client_ip()
+ip_address = get_client_ip()
 
 def local_css(file_name):
     with open(file_name) as f:
