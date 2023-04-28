@@ -105,11 +105,11 @@ def main():
     # Add a checkbox for making final reflections optional
     include_final_reflections = st.checkbox("Include final reflections", value=True)
 
-    if client_ip and is_rate_limited(client_ip):
-        st.warning("You have exceeded the limit of 3 uses per hour. Please wait before trying again.")
-    else:
-
-        if st.button("Start Debate"):
+    # Add a button to start the debate
+    if st.button("Start Debate"):
+        if client_ip and is_rate_limited(client_ip):
+            st.warning("You have exceeded the limit of 3 uses per hour. Please wait before trying again.")
+        else:
             if not topic:
                 st.error("Please enter a debate topic.")
             return
