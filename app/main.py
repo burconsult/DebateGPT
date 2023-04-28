@@ -73,13 +73,14 @@ def display_about():
     # Disclaimer
     This app is for educational purposes only. It is not intended to be used for any other purpose.
     ''')
+
 def display_footer():
     st.markdown('''
     # Contact
     If you have any questions or comments, please contact me at [burconsult@gmail.com](mailto:burconsult@gmail.com)
     ''')
 
-def display_new_debate()
+def display_new_debate():
     # Get the debate topic and number of exchanges
     max_chars = 100
     topic = st.text_input("Enter the debate topic:", value="This house believes that ")
