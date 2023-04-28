@@ -1,7 +1,6 @@
 import streamlit as st
 import random
 import traceback
-from ratelimiter import RateLimiter
 from uuid import uuid4
 from PIL import Image
 
