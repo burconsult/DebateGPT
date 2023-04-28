@@ -63,12 +63,31 @@ def display_about():
     st.markdown('''
     # About
     This app is a [Blueberry Thoughts](https://blueberrythoughts.com) project. The source code is available on [GitHub](https://github.com/burconsult/DebateGPT).
+    This whole project started as an experiment in creating prompts for ChatGPT to act as tyhe two sides of a university debate.
+    The blog article about the prompts is here [A prompt for GPT-4 powered debate teams](https://blueberrythoughts.com/2023/04/21/a-prompt-for-gpt-4-powered-debate-teams/).
+    The prompts used by the app are modified to account for the limits of the GPT3.5 API and generate more concise outputs.
+
+    # Usage
+    1. Use the side menu to switch between the app modes.
+    2. Choose 'Start a New Debate' from the drop-down menu to access the debate form.
+    3. Enter a debate topic and the number of exchanges you want to have (1 to 5).
+    4. Uncheck the "Include final reflections" checkbox if you don't want to generate final reflections.
+    5. Click the 'Start Debate' button.
+    6. Wait for the debate to be generated.
+    7. The debate will be saved to the database and to a PDF file.
+    8. Choose 'Previous Debates' from the drop-down menu to access previous debates.
+    9. Expand each debate to see the full arguments by clicking on the ID.
+    10. Click the 'About' button to display this page.
     
     # Credits
-    - [OpenAI](https://openai.com) for the [GPT-3](https://openai.com/blog/openai-api/) API
-    - [Streamlit](https://streamlit.io) for the [Streamlit](https://streamlit.io) framework
+    This app was coded by [Ionut Burchi](https://www.linkedin.com/in/ionutburchi/) of [Blueberry Thoughts](https://blueberrythoughts.com).
+
+    This app uses the following technologies:
+    - [OpenAI](https://openai.com) for the [GPT API](https://openai.com/blog/openai-api/)
+    - [Streamlit](https://streamlit.io) for the [Streamlit](https://streamlit.io) framework and cloud hosting
     - [GitHub](https://github.com) for the [GitHub](https://github.com) platform
     - [Python](https://python.org) for the [Python](https://python.org) programming language
+    - [Microsoft](https://microsoft.com) for the [Visual Studio Code](https://code.visualstudio.com) code editor
 
     # Disclaimer
     This app is for educational purposes only. It is not intended to be used for any other purpose.
@@ -77,7 +96,7 @@ def display_about():
 def display_footer():
     st.markdown('''
     # Contact
-    If you have any questions or comments, please contact me at [burconsult@gmail.com](mailto:burconsult@gmail.com)
+    If you have any questions or comments, please contact me by [email](mailto:burconsult@gmail.com) or on [LinkedIn](https://www.linkedin.com/in/ionutburchi/).
     ''')
 
 def display_new_debate():
@@ -137,11 +156,11 @@ def display_new_debate():
             col1, col2 = st.columns(2)
 
             with col1:
-                st.header(':blue[Initial Pro arguments for the motion]')
+                st.header(':blue[Initial Pro arguments]')
                 st.markdown(f'<div class="pro-gradient">{pro_arguments}</div>', unsafe_allow_html=True)
 
             with col2:
-                st.header(':red[Initial Con arguments against the motion]')
+                st.header(':red[Initial Con arguments]')
                 st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
 
             # Use a loading spinner with random phrases while generating responses
@@ -164,11 +183,11 @@ def display_new_debate():
                     col1, col2 = st.columns(2)
                     exid = str(i+1)
                     with col1:
-                        st.header(':blue[Pro arguments for the motion - '+exid+']')
+                        st.header(':blue[Pro arguments - '+exid+']')
                         st.markdown(f'<div class="pro-gradient">{pro_arguments}</div>', unsafe_allow_html=True)
 
                     with col2:
-                        st.header(':red[Con arguments against the motion - '+exid+']')
+                        st.header(':red[Con arguments - '+exid+']')
                         st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
 
             # Use the state of the checkbox to conditionally include final reflections
