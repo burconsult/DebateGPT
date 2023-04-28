@@ -1,5 +1,5 @@
 import requests
-from ratelimiter import RateLimiter
+from ratelimiter import RateLimiter, RateLimitException
 
 ip_rate_limiters = {}
 
@@ -15,7 +15,12 @@ def is_rate_limited(ip):
         ip_rate_limiters[ip] = RateLimiter(max_calls=3, period=3600)
 
     rate_limiter = ip_rate_limiters[ip]
-    return not rate_limiter.call_allowed()
+    try:
+        with rate_limiter:
+            pass
+        return False
+    except RateLimitException:
+        return True
 
 def get_rate_limit_remaining(ip):
     if ip not in ip_rate_limiters:
