@@ -88,7 +88,7 @@ def display_footer():
 def display_new_debate():
 
     # Get the user IP address
-    ip_address = get_client_ip()
+    ip_address = str(get_client_ip())
 
     # Get the debate topic and number of exchanges
     max_chars = 100
@@ -115,8 +115,7 @@ def display_new_debate():
             debate_id = str(uuid4())
 
             # Display the rate limit remaining
-            with rate_limiter:
-                st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
+            st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
 
             # Define funny short phrases about debates
             debate_phrases = [
