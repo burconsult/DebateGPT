@@ -17,7 +17,7 @@ st.set_page_config(page_title="DebateGPT", layout="wide")
 api_key = st.secrets["OPENAI_API_KEY"]
 
 # Get the user IP address
-client_ip = client_ip()
+ip_address = client_ip()
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -114,7 +114,7 @@ def display_new_debate():
             debate_id = str(uuid4())
 
             # Display the rate limit remaining
-            st.write(f"You have {get_rate_limit_remaining(client_ip)} debates remaining for this hour.")
+            st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
 
             # Define funny short phrases about debates
             debate_phrases = [
@@ -223,7 +223,7 @@ def display_new_debate():
 
                 # Save the debate to the database
                 try:
-                    save_debate_to_db(debate_id, topic, client_ip, pro_args, con_args)
+                    save_debate_to_db(debate_id, topic, ip_address, pro_args, con_args)
                     st.success("Debate saved to the database successfully.")
                 except Exception as e:
                     st.error(f"An error occurred while saving the debate to the database: {str(e)}")
@@ -261,7 +261,7 @@ def main():
     elif app_mode == "View Previous Debates":
         display_previous_debates()
     elif app_mode == "Start a New Debate":
-        if client_ip and is_rate_limited(client_ip):
+        if ip_address and is_rate_limited(ip_address):
             st.warning("You have exceeded the limit of 3 uses per hour. Please wait before trying again.")
         else:
             display_new_debate()
