@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import traceback
+from ratelimiter import RateLimiter
 from uuid import uuid4
 from PIL import Image
 
@@ -114,7 +115,8 @@ def display_new_debate():
             debate_id = str(uuid4())
 
             # Display the rate limit remaining
-            st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
+            with rate_limiter:
+                st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
 
             # Define funny short phrases about debates
             debate_phrases = [
