@@ -105,7 +105,10 @@ def display_new_debate():
     include_final_reflections = st.checkbox("Include final reflections", value=True)
 
     # Display the rate limit remaining
-    st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
+    if is_rate_limited(ip_address):
+        st.error("You have reached the maximum number of debates allowed for this hour.")
+    else:
+        st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
 
     # Add a button to start the debate
     start_debate = st.button("Start Debate")

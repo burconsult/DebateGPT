@@ -22,9 +22,7 @@ def get_rate_limit_remaining(ip):
         ip_rate_limiters[ip] = RateLimiter(max_calls=3, period=3600)
 
     rate_limiter = ip_rate_limiters[ip]
-    
-    with rate_limiter:
-        remaining_calls = rate_limiter.max_calls - len(rate_limiter.calls)
+    remaining_calls = rate_limiter.max_calls - len(rate_limiter.calls)
     return remaining_calls
 
 def get_rate_limit_reset_time(ip):
