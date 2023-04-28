@@ -108,10 +108,11 @@ def display_new_debate():
     if is_rate_limited(ip_address):
         st.error("You have reached the maximum number of debates allowed for this hour.")
     else:
-        st.write(f"You have {get_rate_limit_remaining(ip_address)} debates remaining for this hour.")
+        st.write(f"You can run 3 debates each hour.")
+        start_debate = st.button("Start Debate")
 
     # Add a button to start the debate
-    start_debate = st.button("Start Debate")
+    
     if start_debate:
         if not topic:
             st.error("Please enter a debate topic.")
