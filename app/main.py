@@ -17,7 +17,7 @@ st.set_page_config(page_title="DebateGPT", layout="wide")
 api_key = st.secrets["OPENAI_API_KEY"]
 
 # Get the user IP address
-ip_address = client_ip()
+client_ip = client_ip()
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -208,7 +208,7 @@ def main():
             st.markdown(f'<div class="con-gradient">{con_reflection}</div>', unsafe_allow_html=True)
     else:
         pass
-        
+
         # Set debate_completed to True after the debate is done
         st.session_state.debate_completed = True
 
