@@ -1,7 +1,7 @@
 # DebateGPT
  A GPT powered Streamlit app for debates
  
- ![DebateGPT Logo](https://burconsult-debategpt-debategpt-7ple3d.streamlit.app/~/+/media/a76fba9dccbcac2f98290ad61464cf57d6b2e29da742aed0dc8d3096.png)
+ ![DebateGPT Logo](https://raw.githubusercontent.com/burconsult/DebateGPT/main/static/logo.svg)
 
 ## Introduction
 
