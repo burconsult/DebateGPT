@@ -42,11 +42,15 @@ def display_previous_debates():
 
             # Add download button for the PDF
             download_pdf(row['debate_id'])
-            
-            # Add delete button for the debate
-            if st.button(f"Delete debate {row['debate_id']}"):
-                delete_debate_from_db(row['debate_id'])
-                st.write("Debate deleted successfully.")
+
+            if not st.session_state.is_logged_in:
+                # Add delete button for the debate if logged on as admin
+                if st.button(f"Delete debate {row['debate_id']}"):
+                    delete_debate_from_db(row['debate_id'])
+                    st.write("Debate deleted successfully.")
+            else:
+                # Do nothing
+                pass
 
 def display_about():
     st.markdown('''
@@ -290,7 +294,7 @@ def main():
     # Set the current state of the debate and login status
     if 'debate_completed' not in st.session_state:
         st.session_state.debate_completed = False
-        
+
     if 'is_logged_in' not in st.session_state:
         st.session_state.is_logged_in = False
 
