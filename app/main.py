@@ -240,6 +240,12 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
         download_pdf(debate_id)
     pass
 
+# Display SVG file
+def display_svg(file_path):
+    with open(file_path, "r") as f:
+        svg = f.read()
+    st.markdown(svg, unsafe_allow_html=True)
+
 # Main function for the AI debate app
 def main():
 
@@ -253,8 +259,7 @@ def main():
 
     # App title
     st.title("DebateGPT")
-    image = Image.open('static/logo.svg')
-    st.image(image, caption='DebateGPT', output_format="svg", width=200)
+    display_svg("static/logo.svg")
 
     # Add a sidebar with the app options
     st.sidebar.title("DebateGPT")
