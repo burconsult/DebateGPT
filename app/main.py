@@ -254,7 +254,7 @@ def main():
     # App title
     st.title("DebateGPT")
     image = Image.open('static/logo.png')
-    st.image(image, caption='DebateGPT', use_column_width=False)
+    st.image(image, caption='DebateGPT', use_column_width=False, width=200)
 
     # Add a sidebar with the app options
     st.sidebar.title("DebateGPT")
