@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import traceback
+import base64
 from uuid import uuid4
 from PIL import Image
 
@@ -14,6 +15,9 @@ st.set_page_config(page_title="DebateGPT", layout="wide")
 
 #Get the OPEANAI_API_KEY from the environment variables
 api_key = st.secrets["OPENAI_API_KEY"]
+
+#Get the Admin Password from the environment variables
+admin_password = st.secrets["ADMIN_PASSWORD"]
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -240,6 +244,36 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
         download_pdf(debate_id)
     pass
 
+# Authenticate the admin user
+def authenticate(password: str, admin_password: str) -> bool:
+    return password == admin_password
+
+# Create a download link for the database file
+def create_download_link(file_path, file_name):
+    with open(file_path, "rb") as f:
+        data = f.read()
+    b64_data = base64.b64encode(data).decode()
+    href = f'<a download="{file_name}" href="data:application/octet-stream;base64,{b64_data}">Download {file_name}</a>'
+    return href
+
+#Display the Admin section
+def display_admin_section():
+    admin_password = st.secrets["ADMIN_PASSWORD"]
+
+    st.header("Admin Section")
+    password = st.text_input("Enter the admin password:", type="password")
+
+    if password:
+        if authenticate(password, admin_password):
+            st.success("Access granted. Welcome to the admin section!")
+            # Download the database file
+            db_file_path = "db/debates.db"
+            db_file_name = "debates.db"
+            st.markdown(create_download_link(db_file_path, db_file_name), unsafe_allow_html=True)
+        else:
+            st.error("Incorrect password. Access denied.")
+    
+
 # Main function for the AI debate app
 def main():
 
@@ -260,7 +294,7 @@ def main():
     st.sidebar.title("DebateGPT")
     st.sidebar.markdown("### Options")
     app_mode = st.sidebar.selectbox("Choose the app mode:",
-        ["About", "Start a New Debate", "View Previous Debates"])
+        ["About", "Start a New Debate", "View Previous Debates", "Admin"])
     
     # Display the app mode
     if app_mode == "About":
@@ -269,5 +303,7 @@ def main():
         display_previous_debates()
     elif app_mode == "Start a New Debate":
         display_new_debate()
+    elif app_mode == "Admin":
+        display_admin_section()
     #Display the footer
     display_footer()
