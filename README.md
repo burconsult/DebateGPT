@@ -1,7 +1,7 @@
 # DebateGPT
  A GPT powered Streamlit app for debates
  
- ![DebateGPT Logo](https://raw.githubusercontent.com/burconsult/DebateGPT/main/static/logo.svg)
+ ![DebateGPT Logo](https://raw.githubusercontent.com/burconsult/DebateGPT/main/static/logo.png)
 
 ## Introduction
 
