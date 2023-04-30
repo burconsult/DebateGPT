@@ -58,9 +58,13 @@ def display_about():
     st.markdown('''
     # About
     This app is a [Blueberry Thoughts](https://blueberrythoughts.com) project. The source code is available on [GitHub](https://github.com/burconsult/DebateGPT).
-    This whole project started as an experiment in creating prompts for ChatGPT to act as tyhe two sides of a university debate.
+    This whole project started as an experiment in creating prompts for ChatGPT to act as the two sides of a university debate.
     The blog article about the prompts is here [A prompt for GPT-4 powered debate teams](https://blueberrythoughts.com/2023/04/21/a-prompt-for-gpt-4-powered-debate-teams/).
     The prompts used by the app are modified to account for the limits of the GPT3.5 API and generate more concise outputs.
+    When I started I had done little coding in Python and had no idea how to use Streamlit. I learned as I went along and I am still learning.
+    It was a fun project and I hope you enjoy using it. I have tried to incorporate as many features as I could in the short time I had.
+    I will keep adding features as I learn more about Streamlit and Python. There was an attempt to use TailWind CSS but the Streamlit module for that is deprecated.
+    I am sure there are many ways to improve the code. If you have any suggestions, please let me know.
 
     # Usage
     1. Use the side menu to switch between the app modes.
@@ -75,9 +79,9 @@ def display_about():
     10. Click the 'About' button to display this page.
     
     # Credits
-    This app was coded by [Ionut Burchi](https://www.linkedin.com/in/ionutburchi/) of [Blueberry Thoughts](https://blueberrythoughts.com).
+    This app was coded by [Ionut Burchi](https://www.linkedin.com/in/ionutburchi/) as a [Blueberry Thoughts](https://blueberrythoughts.com) experiment.
 
-    This app uses the following technologies:
+    The app was developed using the following technologies:
     - [OpenAI](https://openai.com) for the [GPT API](https://openai.com/blog/openai-api/)
     - [Streamlit](https://streamlit.io) for the [Streamlit](https://streamlit.io) framework and cloud hosting
     - [GitHub](https://github.com) for the [GitHub](https://github.com) platform
@@ -91,7 +95,7 @@ def display_about():
 def display_footer():
     st.markdown('''
     # Contact
-    If you have any questions or comments, please contact me by [email](mailto:burconsult@gmail.com) or on [LinkedIn](https://www.linkedin.com/in/ionutburchi/).
+    If you have any questions or comments, please contact me on [Twitter](https://twitter.com/burconsult) or on [LinkedIn](https://www.linkedin.com/in/ionutburchi/).
     ''')
 
 def display_new_debate():
