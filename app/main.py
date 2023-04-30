@@ -19,6 +19,9 @@ api_key = st.secrets["OPENAI_API_KEY"]
 #Get the Admin Password from the environment variables
 admin_password = st.secrets["ADMIN_PASSWORD"]
 
+#Get the Admin IP from the environment variables
+admin_ip = st.secrets["ADMIN_IP"]
+
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -95,6 +98,8 @@ def display_new_debate():
 
     # Get the user IP address
     ip_address = str(get_client_ip())
+    if ip_address == admin_ip:
+        ip_address = "admin"
 
     # Get the debate topic and number of exchanges
     max_chars = 100
@@ -111,10 +116,11 @@ def display_new_debate():
     include_final_reflections = st.checkbox("Include final reflections", value=True)
 
     # Display the rate limit remaining
-    if is_rate_limited(ip_address):
+    if is_rate_limited(ip_address, "start_debate"):
         st.error("You have reached the maximum number of debates allowed for this hour.")
     else:
         st.write(f"You can run 3 debates each hour.")
+
         
         # Add a button to start the debate
         start_debate_button = st.button("Start Debate")

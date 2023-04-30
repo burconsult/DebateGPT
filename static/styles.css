@@ -1,11 +1,13 @@
 .pro-gradient {
-    background: linear-gradient(to right, #4286f4, #373b44);
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 45%, rgba(0,212,255,1) 100%);
     padding: 15px;
     border-radius: 10px;
     color: white;
 }
 .con-gradient {
-    background: linear-gradient(to right, #373b44, #f45c42);
+    background: rgb(0,212,255);
+    background: linear-gradient(90deg, rgba(0,212,255,1) 100%, rgba(52,9,121,1) 45%, rgba(255,0,249,1) 0%);
     padding: 15px;
     border-radius: 10px;
     color: white;
