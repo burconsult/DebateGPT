@@ -45,11 +45,10 @@ def display_previous_debates():
             
             # Add delete button for the debate if logged on as admin
             if st.session_state.is_logged_in:
-                if st.button(f"Delete debate"):
+                if st.button(f"Delete debate {row['debate_id']}"):
                     delete_debate_from_db(row['debate_id'])
                     st.write("Debate deleted successfully.")
             else:
-                # Do nothing
                 pass
 
 def display_about():
@@ -273,6 +272,7 @@ def display_admin_section():
             if authenticate(password, admin_password):
                 st.success("Access granted. Welcome to the admin section!")
                 st.session_state.is_logged_in = True
+                st.experimental_rerun() # Rerun the app to display the admin section
             else:
                 st.error("Incorrect password. Access denied.")
     else:
