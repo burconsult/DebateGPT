@@ -261,25 +261,38 @@ def display_admin_section():
     admin_password = st.secrets["ADMIN_PASSWORD"]
 
     st.header("Admin Section")
-    password = st.text_input("Enter the admin password:", type="password")
 
-    if password:
-        if authenticate(password, admin_password):
-            st.success("Access granted. Welcome to the admin section!")
-            # Download the database file
-            db_file_path = "db/debates.db"
-            db_file_name = "debates.db"
-            st.markdown(create_download_link(db_file_path, db_file_name), unsafe_allow_html=True)
-        else:
-            st.error("Incorrect password. Access denied.")
+    if not st.session_state.is_logged_in:
+        password = st.text_input("Enter the admin password:", type="password")
+
+        if password:
+            if authenticate(password, admin_password):
+                st.success("Access granted. Welcome to the admin section!")
+                st.session_state.is_logged_in = True
+            else:
+                st.error("Incorrect password. Access denied.")
+    else:
+        # Add your admin panel functionality here
+
+        db_file_path = "db/debates.db"
+        db_file_name = "debates.db"
+        st.markdown(create_download_link(db_file_path, db_file_name), unsafe_allow_html=True)
+
+        # Add a log out button
+        if st.button("Log Out"):
+            st.session_state.is_logged_in = False
+            st.success("Logged out successfully.")
     
 
 # Main function for the AI debate app
 def main():
 
-    # Set the current state of the debate
+    # Set the current state of the debate and login status
     if 'debate_completed' not in st.session_state:
         st.session_state.debate_completed = False
+        
+    if 'is_logged_in' not in st.session_state:
+        st.session_state.is_logged_in = False
 
     # Custom CSS for gradient styling
     #  To get rid of the Streamlit branding stuff
