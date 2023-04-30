@@ -12,12 +12,12 @@ def get_client_ip():
 
 ONE_HOUR = 3600
 
-@limits(key_func=lambda ip, key: f"{ip}_{key}", calls=3, period=ONE_HOUR)
-def rate_limited_call(ip, key):
+@limits(calls=10, period=ONE_HOUR)
+def rate_limited_call(ip):
     pass
 
 
-def is_rate_limited(ip, key):
+def is_rate_limited(ip):
 
     # Check if the IP address is on the whitelist
     if ip == 'admin':
@@ -25,8 +25,7 @@ def is_rate_limited(ip, key):
 
     # Continue with the rate limit check
     try:
-        rate_limited_call(ip, key)
+        rate_limited_call(ip)
         return False
     except RateLimitException:
         return True
-e
