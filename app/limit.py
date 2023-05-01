@@ -7,7 +7,8 @@ ip_rate_limiters = {}
 def get_client_ip(api_key):
     try:
         response = requests.get("https://ipgeolocation.abstractapi.com/v1/?api_key={api_key}")
-        ip = str(json.loads(response.text)['ip_address'])
+        result = json.loads(response.content)
+        ip = str(format(result['ip_address']))
         return ip
     except:
         return None
