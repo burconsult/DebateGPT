@@ -1,14 +1,13 @@
-import socket
+import requests
+import json
 from ratelimit import limits, RateLimitException
 
 ip_rate_limiters = {}
 
-def get_client_ip():
+def get_client_ip(api_key):
     try:
-        # get the hostname of the socket
-        hostname = socket.gethostname()
-        # get the IP address of the hostname
-        ip = socket.gethostbyname(hostname)
+        response = requests.get("https://ipgeolocation.abstractapi.com/v1/?api_key={api_key}")
+        ip = json.loads(response.text)['ip_address']
         return ip
     except:
         return None

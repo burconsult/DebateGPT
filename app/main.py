@@ -13,11 +13,14 @@ from .limit import get_client_ip, is_rate_limited
 # Set up the Streamlit app
 st.set_page_config(page_title="DebateGPT", layout="wide")
 
-#Get the OPEANAI_API_KEY from the environment variables
-api_key = st.secrets["OPENAI_API_KEY"]
+# Get the OPEANAI_API_KEY from the environment variables
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 
-#Get the Admin Password from the environment variables
+# Get the Admin Password from the environment variables
 admin_password = st.secrets["ADMIN_PASSWORD"]
+
+# Get the Abstract API key from the environment variables
+abstract_api_key = st.secrets["ABSTRACT_API_KEY"]
 
 #Get the Admin IP from the environment variables
 admin_ip = st.secrets["ADMIN_IP"]
@@ -101,7 +104,7 @@ def display_footer():
 def display_new_debate():
 
     # Get the user IP address
-    ip_address = str(get_client_ip())
+    ip_address = str(get_client_ip(abstract_api_key))
     if ip_address == admin_ip:
         ip_address = "admin"
 
@@ -163,8 +166,8 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
 
     # Use a loading spinner with random phrases while generating messages
     with st.spinner(random.choice(debate_phrases)):
-        pro_arguments = get_gpt_response(pro_messages, api_key)
-        con_arguments = get_gpt_response(con_messages, api_key)
+        pro_arguments = get_gpt_response(pro_messages, openai_api_key)
+        con_arguments = get_gpt_response(con_messages, openai_api_key)
         pro_args = pro_arguments
         con_args = con_arguments
 
@@ -190,8 +193,8 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
             con_messages.append({"role": "user", "content": f"Respond to the arguments in favor of the motion. Keep it under 140 words."})
 
             # Get GPT-generated responses for the debate exchange
-            pro_arguments = get_gpt_response(pro_messages, api_key)
-            con_arguments = get_gpt_response(con_messages, api_key)
+            pro_arguments = get_gpt_response(pro_messages, openai_api_key)
+            con_arguments = get_gpt_response(con_messages, openai_api_key)
             pro_args += pro_arguments
             con_args += con_arguments
 
@@ -216,8 +219,8 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
 
         # Get GPT-generated final reflections
         with st.spinner(random.choice(debate_phrases)):
-            pro_reflection = get_gpt_response(pro_messages, api_key)
-            con_reflection = get_gpt_response(con_messages, api_key)
+            pro_reflection = get_gpt_response(pro_messages, openai_api_key)
+            con_reflection = get_gpt_response(con_messages, openai_api_key)
             pro_args += pro_reflection
             con_args += con_reflection
 
