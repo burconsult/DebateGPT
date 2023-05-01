@@ -57,7 +57,7 @@ def display_previous_debates():
 def display_about():
     if st.button(f"START"):
         st.session_state.app_mode = "Start a New Debate"
-        display_new_debate()
+        st.experimental_rerun() # Rerun the app to display the new debate section
 
     st.markdown('''
     # About
