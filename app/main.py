@@ -55,6 +55,10 @@ def display_previous_debates():
                 pass
 
 def display_about():
+    if st.button(f"START"):
+        st.session_state.app_mode = "Start a New Debate"
+        display_new_debate()
+
     st.markdown('''
     # About
     This app is a [Blueberry Thoughts](https://blueberrythoughts.com) project. The source code is available on [GitHub](https://github.com/burconsult/DebateGPT).
