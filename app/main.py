@@ -55,10 +55,6 @@ def display_previous_debates():
                 pass
 
 def display_about():
-    if st.button(f"START"):
-        st.session_state.app_mode = "Start a New Debate"
-        st.experimental_rerun() # Rerun the app to display the new debate section
-
     st.markdown('''
     # About
     This app is a [Blueberry Thoughts](https://blueberrythoughts.com) project. The source code is available on [GitHub](https://github.com/burconsult/DebateGPT).
@@ -325,16 +321,16 @@ def main():
     st.sidebar.title("DebateGPT")
     st.sidebar.markdown("### Options")
     app_mode = st.sidebar.selectbox("Choose the app mode:",
-        ["About", "Start a New Debate", "View Previous Debates", "Admin"])
+        ["Start a New Debate", "View Previous Debates", "Admin", "About"])
     
     # Display the app mode
-    if app_mode == "About":
-        display_about()
+    if app_mode == "Start a New Debate":
+        display_new_debate()
     elif app_mode == "View Previous Debates":
         display_previous_debates()
-    elif app_mode == "Start a New Debate":
-        display_new_debate()
     elif app_mode == "Admin":
         display_admin_section()
+    elif app_mode == "About":
+        display_about()
     #Display the footer
     display_footer()
