@@ -1,11 +1,14 @@
-import requests
+import socket
 from ratelimit import limits, RateLimitException
 
 ip_rate_limiters = {}
 
 def get_client_ip():
     try:
-        ip = requests.get("https://api.ipify.org?format=json").json()["ip"]
+        # get the hostname of the socket
+        hostname = socket.gethostname()
+        # get the IP address of the hostname
+        ip = socket.gethostbyname(hostname)
         return ip
     except:
         return None
