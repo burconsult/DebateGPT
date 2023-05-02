@@ -16,11 +16,11 @@ st.set_page_config(page_title="DebateGPT", layout="wide")
 # Get the OPEANAI_API_KEY from the environment variables
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 
-# Get the Admin Password from the environment variables
-admin_password = st.secrets["ADMIN_PASSWORD"]
-
 # Get the Abstract API key from the environment variables
 abstract_api_key = st.secrets["ABSTRACT_API_KEY"]
+
+# Get the Admin Password from the environment variables
+admin_password = st.secrets["ADMIN_PASSWORD"]
 
 #Get the Admin IP from the environment variables
 admin_ip = st.secrets["ADMIN_IP"]
@@ -104,10 +104,10 @@ def display_footer():
 def display_new_debate():
 
     # Get the user IP address
-    ip_address = str(get_client_ip(abstract_api_key))
+    get_client_ip(abstract_api_key)
     #if ip_address == admin_ip:
     #    ip_address = "admin"
-    st.write(f"Your IP address is {ip_address}.")
+    # st.write(f"Your IP address is {ip_address}.")
     # Get the debate topic and number of exchanges
     max_chars = 100
     topic = st.text_input("Enter the debate topic:", value="This house believes that ")
