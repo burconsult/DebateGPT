@@ -13,18 +13,6 @@ def get_client_ip(api_key):
     except:
         return None
 
-def get_client_ip2(api_key):
-    try:
-        response = requests.get(f"https://ipgeolocation.abstractapi.com/v1/?api_key={api_key}")
-        print("Response content:", response.content)  # Add this line for debugging
-        print("Status code:", response.status_code)  # Add this line for debugging
-        result = json.loads(response.content)
-        ip = result['ip_address']
-        return ip
-    except Exception as e:  # Change this line to capture the exception and print it
-        print("Error:", e)  # Add this line for debugging
-        return None
-
 ONE_HOUR = 3600
 @limits(calls=10, period=ONE_HOUR)
 def rate_limited_call(ip):

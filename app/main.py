@@ -2,6 +2,8 @@ import streamlit as st
 import random
 import traceback
 import base64
+import requests
+import json
 from uuid import uuid4
 from PIL import Image
 
@@ -100,6 +102,18 @@ def display_footer():
     # Contact
     If you have any questions or comments, please contact me on [Twitter](https://twitter.com/burconsult) or on [LinkedIn](https://www.linkedin.com/in/ionutburchi/).
     ''')
+
+def get_client_ip2(api_key):
+    try:
+        response = requests.get(f"https://ipgeolocation.abstractapi.com/v1/?api_key={api_key}")
+        st.write(f"Response content:", response.content)  # Add this line for debugging
+        st.write(f"Status code:", response.status_code)  # Add this line for debugging
+        result = json.loads(response.content)
+        ip = result['ip_address']
+        return ip
+    except Exception as e:  # Change this line to capture the exception and print it
+        st.error(f"Error:", e)  # Add this line for debugging
+        return None
 
 def display_new_debate():
 
