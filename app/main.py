@@ -104,7 +104,7 @@ def display_footer():
 def display_new_debate():
 
     # Get the user IP address
-    get_client_ip(abstract_api_key)
+    get_client_ip2(abstract_api_key)
     #if ip_address == admin_ip:
     #    ip_address = "admin"
     # st.write(f"Your IP address is {ip_address}.")
