@@ -42,18 +42,6 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-def scroll_to_bottom(id):
-    st.markdown(
-        """<script type="text/javascript">
-        function scrollFunction(divid) {
-            const element = document.getElementById(divid);
-            element.scrollIntoView({ behavior: 'smooth'});
-        }
-        scrollFunction('%s');
-        </script>""",
-        unsafe_allow_html=True,
-    )
-
 def display_previous_debates():
     df = get_previous_debates()
     df["pro_args_sample"] = df["pro_args"].str[:100] + "..."
@@ -204,12 +192,11 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
 
     with col1:
         st.header(':blue[Initial Pro arguments]')
-        st.markdown(f'<div class="pro-gradient" id="pro0">{pro_arguments}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="pro-gradient">{pro_arguments}</div>', unsafe_allow_html=True)
 
     with col2:
         st.header(':red[Initial Con arguments]')
         st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
-    scroll_to_bottom("pro0")
 
     # Use a loading spinner with random phrases while generating responses
     for i in range(num_exchanges):
@@ -232,12 +219,11 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
             exid = str(i+1)
             with col1:
                 st.header(':blue[Pro arguments - '+exid+']')
-                st.markdown(f'<div class="pro-gradient" id="pro'+exid+'">{pro_arguments}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="pro-gradient">{pro_arguments}</div>', unsafe_allow_html=True)
 
             with col2:
                 st.header(':red[Con arguments - '+exid+']')
                 st.markdown(f'<div class="con-gradient">{con_arguments}</div>', unsafe_allow_html=True)
-            scroll_to_bottom("pro"+exid)
 
     # Use the state of the checkbox to conditionally include final reflections
     if include_final_reflections:
@@ -258,12 +244,11 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
         col1, col2 = st.columns(2)
         with col1:
             st.header(':blue[Final reflections from the Pro Team]')
-            st.markdown(f'<div class="pro-gradient" id="proref">{pro_reflection}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="pro-gradient">{pro_reflection}</div>', unsafe_allow_html=True)
 
         with col2:
             st.header(':red[Final reflections from the Con Team]')
             st.markdown(f'<div class="con-gradient">{con_reflection}</div>', unsafe_allow_html=True)
-        scroll_to_bottom("proref")
     else:
         pass
 
