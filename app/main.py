@@ -147,7 +147,11 @@ def display_new_debate():
                 else:
                     start_debate(topic, num_exchanges, include_final_reflections, ip_address)
                     st.session_state.debate_counter += 1
-                    st.success(f"You can still run {3 - st.session_state.debate_counter} debates this hour.")
+                    debates_left = 3 - st.session_state.debate_counter
+                    if debates_left == 0:
+                        st.error("You have reached the maximum number of debates allowed for this hour.")
+                    else:
+                        st.success(f"You can still run {debates_left} debates this hour.")
 
 
 def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
