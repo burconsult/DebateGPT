@@ -77,9 +77,13 @@ def display_about():
     This whole project started as an experiment in creating prompts for ChatGPT to act as the two sides of a university debate.
     The blog article about the prompts is here [A prompt for GPT-4 powered debate teams](https://blueberrythoughts.com/2023/04/21/a-prompt-for-gpt-4-powered-debate-teams/).
     The prompts used by the app are modified to account for the limits of the GPT3.5 API and generate more concise outputs.
+
     When I started I had done little coding in Python and had no idea how to use Streamlit. I learned as I went along and I am still learning.
     It was a fun project and I hope you enjoy using it. I have tried to incorporate as many features as I could in the short time I had.
-    I will keep adding features as I learn more about Streamlit and Python. There was an attempt to use TailWind CSS but the Streamlit module for that is deprecated.
+    I will keep adding features as I learn more about Streamlit and Python. There was an attempt to use TailWind CSS but the Streamlit module for that is deprecated. 
+    I also tried to use the Abstract API to get the client's IP address but that doesn't work on Streamlit Sharing. I will keep trying to find a way to make it work. 
+    For now the limit is 3 debates per hour using session state.
+    
     I am sure there are many ways to improve the code. If you have any suggestions, please let me know.
 
     # Usage
