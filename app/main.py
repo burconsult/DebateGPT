@@ -2,18 +2,15 @@ import streamlit as st
 import random
 import traceback
 import base64
+import time
 import requests
-import json
 from uuid import uuid4
 from PIL import Image
 
 from .gpt import get_gpt_response
 from .db import save_debate_to_db, get_previous_debates, delete_debate_from_db
 from .pdf import save_debate_as_pdf, download_pdf
-from .limit import get_client_ip, is_rate_limited
-
-# Set up the Streamlit app
-st.set_page_config(page_title="DebateGPT", layout="wide")
+from .abstract import get_client_ip
 
 # Get the OPEANAI_API_KEY from the environment variables
 openai_api_key = st.secrets["OPENAI_API_KEY"]
@@ -24,8 +21,8 @@ abstract_api_key = st.secrets["ABSTRACT_API_KEY"]
 # Get the Admin Password from the environment variables
 admin_password = st.secrets["ADMIN_PASSWORD"]
 
-#Get the Admin IP from the environment variables
-admin_ip = st.secrets["ADMIN_IP"]
+#Get the IP address (doesn't work on Streamlit Community Cloud)
+ip_address = get_client_ip(abstract_api_key)
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -103,26 +100,8 @@ def display_footer():
     If you have any questions or comments, please contact me on [Twitter](https://twitter.com/burconsult) or on [LinkedIn](https://www.linkedin.com/in/ionutburchi/).
     ''')
 
-def get_client_ip2(api_key):
-    try:
-        response = requests.get(f"https://ipgeolocation.abstractapi.com/v1/?api_key={api_key}")
-        st.write(f"Response content:", response.content)  # Add this line for debugging
-        st.write(f"Status code:", response.status_code)  # Add this line for debugging
-        result = json.loads(response.content)
-        ip = result['ip_address']
-        return ip
-    except Exception as e:  # Change this line to capture the exception and print it
-        st.error(f"Error:", e)  # Add this line for debugging
-        return None
-
 def display_new_debate():
 
-    # Get the user IP address
-    get_client_ip2(abstract_api_key)
-    ip_address = get_client_ip(abstract_api_key)
-    if ip_address == admin_ip:
-        ip_address = "admin"
-    # st.write(f"Your IP address is {ip_address}.")
     # Get the debate topic and number of exchanges
     max_chars = 100
     topic = st.text_input("Enter the debate topic:", value="This house believes that ")
@@ -136,22 +115,20 @@ def display_new_debate():
 
     # Add a checkbox for making final reflections optional
     include_final_reflections = st.checkbox("Include final reflections", value=True)
-
-    # Display the rate limit remaining
-    if is_rate_limited(ip_address):
-        st.error("You have reached the maximum number of debates allowed for this hour.")
-    else:
-        st.write(f"Your calls to the app are limited. You will receive an error message if you exceed the limit.")
-
         
-        # Add a button to start the debate
-        start_debate_button = st.button("Start Debate")
-        if start_debate_button:
-            if not topic:
-                st.error("Please enter a debate topic.")
-                return
-            else:
+    # Add a button to start the debate
+    start_debate_button = st.button("Start Debate")
+    if start_debate_button:
+        if not topic:
+            st.error("Please enter a debate topic.")
+            return
+        else:
+            if not is_rate_limited():
                 start_debate(topic, num_exchanges, include_final_reflections, ip_address)
+                st.session_state.debate_counter += 1
+                st.success(f"You can still run {3 - st.session_state.debate_counter} debates this hour.")
+            else:
+                st.error("You have reached the maximum number of debates allowed for this hour.")
 
 
 def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
@@ -279,6 +256,20 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
 def authenticate(password: str, admin_password: str) -> bool:
     return password == admin_password
 
+# Rate limit
+def is_rate_limited():
+    current_time = time.time()
+    time_elapsed = current_time - st.session_state.last_call_timestamp
+    
+    if time_elapsed >= 3600:  # Reset the counter and timestamp after one hour has passed
+        st.session_state.debate_counter = 0
+        st.session_state.last_call_timestamp = current_time
+    
+    if st.session_state.debate_counter < 3:
+        return False
+    else:
+        return True
+
 # Create a download link for the database file
 def create_download_link(file_path, file_name):
     with open(file_path, "rb") as f:
@@ -319,12 +310,19 @@ def display_admin_section():
 # Main function for the AI debate app
 def main():
 
+    # Set up the Streamlit app
+    st.set_page_config(page_title="DebateGPT", layout="wide")
+
     # Set the current state of the debate and login status
     if 'debate_completed' not in st.session_state:
         st.session_state.debate_completed = False
 
     if 'is_logged_in' not in st.session_state:
         st.session_state.is_logged_in = False
+    
+    if 'debate_counter' not in st.session_state:
+        st.session_state.debate_counter = 0
+        st.session_state.last_call_timestamp = time.time()
 
     # Custom CSS for gradient styling
     #  To get rid of the Streamlit branding stuff
