@@ -119,7 +119,7 @@ def display_new_debate():
     # Get the debate topic and number of exchanges
     max_chars = 100
     default_text = "This house believes that "
-    topic = st.text_input("Enter the debate topic:", value="{default_text}")
+    topic = st.text_input("Enter the debate topic:", value=default_text)
     if len(topic) > max_chars:
         st.error(f"The debate topic must be no longer than {max_chars} characters.")
     else:
