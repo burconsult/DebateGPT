@@ -24,6 +24,20 @@ admin_password = st.secrets["ADMIN_PASSWORD"]
 #Get the IP address (doesn't work on Streamlit Community Cloud)
 ip_address = get_client_ip(abstract_api_key)
 
+# Rate limit
+def is_rate_limited():
+    current_time = time.time()
+    time_elapsed = current_time - st.session_state.last_call_timestamp
+    
+    if time_elapsed >= 3600:  # Reset the counter and timestamp after one hour has passed
+        st.session_state.debate_counter = 0
+        st.session_state.last_call_timestamp = current_time
+    
+    if st.session_state.debate_counter < 3:
+        return False
+    else:
+        return True
+
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -123,12 +137,17 @@ def display_new_debate():
             st.error("Please enter a debate topic.")
             return
         else:
-            if not is_rate_limited():
-                start_debate(topic, num_exchanges, include_final_reflections, ip_address)
-                st.session_state.debate_counter += 1
-                st.success(f"You can still run {3 - st.session_state.debate_counter} debates this hour.")
+            if len(topic) > max_chars:
+                st.error(f"The debate topic must be no longer than {max_chars} characters.")
+                return
             else:
-                st.error("You have reached the maximum number of debates allowed for this hour.")
+                if is_rate_limited():
+                    st.error("You have reached the maximum number of debates allowed for this hour.")
+                    return
+                else:
+                    start_debate(topic, num_exchanges, include_final_reflections, ip_address)
+                    st.session_state.debate_counter += 1
+                    st.success(f"You can still run {3 - st.session_state.debate_counter} debates this hour.")
 
 
 def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
@@ -255,20 +274,6 @@ def start_debate(topic, num_exchanges, include_final_reflections, ip_address):
 # Authenticate the admin user
 def authenticate(password: str, admin_password: str) -> bool:
     return password == admin_password
-
-# Rate limit
-def is_rate_limited():
-    current_time = time.time()
-    time_elapsed = current_time - st.session_state.last_call_timestamp
-    
-    if time_elapsed >= 3600:  # Reset the counter and timestamp after one hour has passed
-        st.session_state.debate_counter = 0
-        st.session_state.last_call_timestamp = current_time
-    
-    if st.session_state.debate_counter < 3:
-        return False
-    else:
-        return True
 
 # Create a download link for the database file
 def create_download_link(file_path, file_name):
