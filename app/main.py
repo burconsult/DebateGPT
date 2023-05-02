@@ -107,7 +107,7 @@ def display_new_debate():
     get_client_ip2(abstract_api_key)
     ip_address = get_client_ip(abstract_api_key)
     if ip_address == admin_ip:
-    #    ip_address = "admin"
+        ip_address = "admin"
     # st.write(f"Your IP address is {ip_address}.")
     # Get the debate topic and number of exchanges
     max_chars = 100
