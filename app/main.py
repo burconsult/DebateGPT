@@ -8,7 +8,7 @@ from PIL import Image
 from .gpt import get_gpt_response
 from .db import save_debate_to_db, get_previous_debates, delete_debate_from_db
 from .pdf import save_debate_as_pdf, download_pdf
-from .limit import get_client_ip, is_rate_limited
+from .limit import get_client_ip, is_rate_limited, get_client_ip2
 
 # Set up the Streamlit app
 st.set_page_config(page_title="DebateGPT", layout="wide")
@@ -105,7 +105,8 @@ def display_new_debate():
 
     # Get the user IP address
     get_client_ip2(abstract_api_key)
-    #if ip_address == admin_ip:
+    ip_address = get_client_ip(abstract_api_key)
+    if ip_address == admin_ip:
     #    ip_address = "admin"
     # st.write(f"Your IP address is {ip_address}.")
     # Get the debate topic and number of exchanges
