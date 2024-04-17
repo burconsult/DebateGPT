@@ -9,8 +9,7 @@ def get_gpt_response(prompt, api_key):
     chat_completion = client.chat.completions.create(
         messages=[
             {
-                "role": "user",
-                "content": prompt,
+               prompt,
             }
         ],
         model="gpt-3.5-turbo",
