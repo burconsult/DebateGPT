@@ -8,6 +8,7 @@ def get_gpt_response(messages, api_key):
           messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": messages}
+          ]
     )
 
     return completion.choices[0].message.strip()
