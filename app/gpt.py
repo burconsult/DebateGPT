@@ -1,19 +1,19 @@
 from openai import OpenAI
 
 # Function to get GPT response using chat format
-def get_gpt_response(messages, api_key):
+def get_gpt_response(prompt, api_key):
 
     client = OpenAI(
         api_key=api_key,
     )
-    completion = client.chat.completions.create(
+    chat_completion = client.chat.completions.create(
         messages=[
             {
                 "role": "user",
-                "content": messages,
+                "content": prompt,
             }
         ],
         model="gpt-3.5-turbo",
         )
     
-    return completion.choices[0].message.strip()
+    return chat_completion.choices[0].message.strip()
