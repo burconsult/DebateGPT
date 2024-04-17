@@ -11,4 +11,4 @@ def get_gpt_response(prompt, api_key):
         model="gpt-3.5-turbo",
         )
     
-    return chat_completion.choices[0].message[content]
+    return chat_completion.choices[0].message.content
