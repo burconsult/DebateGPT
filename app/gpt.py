@@ -7,11 +7,7 @@ def get_gpt_response(prompt, api_key):
         api_key=api_key,
     )
     chat_completion = client.chat.completions.create(
-        messages=[
-            {
-               prompt,
-            }
-        ],
+        messages=prompt,
         model="gpt-3.5-turbo",
         )
     
